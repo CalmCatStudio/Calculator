@@ -1,7 +1,26 @@
 body {
     margin: 0;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
 }
 
 h1 {
     text-align: center;
+}
+
+.calculatorContainer {
+    display: flex;
+    flex-flow: column nowrap;
+    background-color: aqua;
+    padding: 15px;
+}
+
+button {
+    flex: 1;
+}
+
+.buttonRow {
+    display: flex;
+    justify-content: space-between;
 }
