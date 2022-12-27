@@ -8,12 +8,20 @@ body {
 h1 {
     text-align: center;
 }
-
+ 
 .calculatorContainer {
     display: flex;
     flex-flow: column nowrap;
-    background-color: aqua;
+    background-color: rgb(45, 58, 175);
     padding: 15px;
+    border-radius: 10px;
+}
+
+ul {
+    list-style: none;
+    display: flex;  
+    padding-left: 0;
+    gap: 4px;
 }
 
 button {

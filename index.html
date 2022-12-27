@@ -11,7 +11,18 @@
 <body>
     <h1>Calculator</h1>
     <div class="calculatorContainer">
-        <input type="text" value="Enter values to calculate">
+        <div class="calculatorInput">
+            <ul>
+                <li><input type="number" id="firstNumber" defaultValue='1'></li>
+                <li><select name="operator" id="operator">
+                    <option value="plus">+</option>
+                    <option value="minus">-</option>
+                    <option value="multiply">*</option>
+                    <option value="divide">/</option>
+                </select></li>
+                <li><input type="number" id="secondNumber" value="2"></li>
+            </ul>
+        </div>
         <div class="buttonRow">
             <button type="button">7</button>
             <button type="button">8</button>
@@ -36,6 +47,9 @@
             <button type="button">=</button>
             <button type="button">/</button>
         </div>
+    </div>
+    <div class="errorWindow">
+        <p>Do math. If there is a problem an explanation may appear here.</p>
     </div>
 </body>
 </html>
