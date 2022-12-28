@@ -10,19 +10,8 @@
 </head>
 <body>
     <h1>Calculator</h1>
-    <div class="calculatorContainer">
-        <div class="calculatorInput">
-            <ul>
-                <li><input type="number" id="firstNumber" defaultValue='1'></li>
-                <li><select name="operator" id="operator">
-                    <option value="plus">+</option>
-                    <option value="minus">-</option>
-                    <option value="multiply">*</option>
-                    <option value="divide">/</option>
-                </select></li>
-                <li><input type="number" id="secondNumber" value="2"></li>
-            </ul>
-        </div>
+    <div class="calculatorContainer">        
+        <input type="text" id="calculatorInput" placeholder="Do math here">        
         <div class="buttonRow">
             <button type="button">7</button>
             <button type="button">8</button>
@@ -42,14 +31,20 @@
             <button type="button">*</button>
         </div>
         <div class="buttonRow">
+            <button type="button">0</button>
             <button type="button">back</button>
             <button type="button">clear</button>
+            <button type="button">.</button>
             <button type="button">=</button>
             <button type="button">/</button>
         </div>
     </div>
     <div class="errorWindow">
-        <p>Do math. If there is a problem an explanation may appear here.</p>
+        <p>Notes:</p>
+        <ul>
+            <li>Include spaces 1 + 1 NOT 1+1</li>
+            <li>Only one expression will get evaluated. You can enter more, but only the first one will be evaluated.</li>
+        </ul>
     </div>
 </body>
 </html>

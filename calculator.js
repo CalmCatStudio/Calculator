@@ -1,90 +1,42 @@
+let snark = "Can't let you do that Star Fox";
 const buttons = document.querySelectorAll('button');
 setupButtons();
 
 
-const firstNumberInput = document.getElementById('firstNumber');
-const operatorInput = document.getElementById('operator');
-const secondNumberInput = document.getElementById('secondNumber');
-let firstNumber = firstNumberInput.value;
-let secondNumber = secondNumberInput.value;
-let operator = '+';
-let answer = 0;
-let isFirstNegativeNumber = false;
-firstNumberInput.addEventListener('keypress', function(e)
-{
-    let key = e.keyCode;
-    if (key == 'ENTER')
-    {
-        secondNumberInput.focus();
-    }
-    else if (isOperator(key))
-    {
-        // This is to allow negative numbers in the textbox
-        if (key === 45 && firstNumberInput.value.length === 0 && isFirstNegativeNumber === false)
-        {
-            isFirstNegativeNumber = true;
-            return;
-        }
-        setOperator(key);
-        if (firstNumberInput.value !== '')
-        {
-            console.log(firstNumberInput.value)
-            secondNumberInput.focus();
-        }
+const calculatorInput = document.getElementById('calculatorInput');
 
-        e.preventDefault();
-        return;
+let firstNumber = 0;
+let secondNumber = 0;
+let operator;
+let answer = 0;
+calculatorInput.addEventListener('click', function()
+{
+    if (calculatorInput.value === snark)
+    {
+        clearInput();
     }
 })
-
-secondNumberInput.addEventListener('keypress', function(e)
+calculatorInput.addEventListener('keypress', function(e)
 {
-    let key = e.keyCode;
+    // TODO: Currently a user must include spaces. I think forcing a space before and after an operator is added would be a nice feature.
+    let key = e.key;
+
     if (isEnterPressed(key))
     {
-        doMath();
-    }
-    else if (isOperator(key))
-    {
-        // Don't accept operator input unless its a MINUS symbol
-        // This is to allow negative numbers in the textbox
-        if (key !== 45)
+        if (tryParseInput(calculatorInput.value))
         {
-            e.preventDefault();
-        }     
+            doMath();
+        }
     }
 })
-
-function setOperator(key)
-{
-    if (key === 43)
-    {
-        operator = '+';
-        operatorInput.value = 'plus';
-    }
-    else if (key === 45)
-    {
-        operator = '-';
-        operatorInput.value = 'minus';
-    }
-    else if (key === 47)
-    {
-        operator - '/';
-        operatorInput.value = 'divide';
-    }
-    else
-    {
-        operator = '*';
-        operatorInput.value = 'multiply';
-    }
-}
 
 function handleButtonPress(buttonVal)
 {
     if (buttonVal === 'back')
     {
-        // TODO: Implement backspace
-        console.log('BACKSPACE');
+        let value = calculatorInput.value;
+        value = value.substring(0, value.length - 1);
+        calculatorInput.value = value;
     }
     else if (buttonVal === 'clear')
     {
@@ -92,25 +44,23 @@ function handleButtonPress(buttonVal)
     }
     else if (buttonVal === '=')
     {
-        doMath();
+        if (tryParseInput(calculatorInput.value))
+        {
+            doMath();
+        }
     }
     else if (isOperator(buttonVal))
     {
-        // TODO: Implement Operator
-        console.log('Operator'); 
+        calculatorInput.value += ` ${buttonVal} `;
     }
     else
     {
-        // TODO: Enter number into equation.
-        console.log('number');
+        calculatorInput.value += buttonVal;
     }
 }
 
 function doMath()
 {
-    firstNumber = parseFloat(firstNumberInput.value);
-    secondNumber = parseFloat(secondNumberInput.value);
-
     switch (operator)
     {
         case '+':
@@ -126,40 +76,76 @@ function doMath()
             if (firstNumber === 0 ||
                 secondNumber === 0)
                 {
-                    // TODO: Snarky message
-                    break;
+                    calculatorInput.value = snark;
+                    return;
                 }
             answer = firstNumber / secondNumber;
             break;
     }
     firstNumber = answer;
-    firstNumberInput.value = answer;
-    secondNumberInput.value = '';
+    calculatorInput.value = answer;
     secondNumber = 0;
+}
+
+function tryParseInput(input)
+{   
+    input = input.trim();
+    let multiSpaceRegex = /\s+/
+    let split = input.split(multiSpaceRegex);
+    firstNumber = parseFloat(split[0]);
+    operator = tryGetOperator(split[1]);
+    secondNumber = parseFloat(split[2]);
+    
+    if (isNaN(firstNumber) || isNaN(secondNumber))
+    {
+        console.log('A number was NaN');
+        console.log(split[0]);
+        console.log(split[2]);
+        return false;
+    }
+    if (operator === false)
+    {
+        console.log('The operator was not valid');
+        return false;
+    }
+    return true;
 }
 
 function clearInput()
 {
-    firstNumberInput.value = secondNumberInput.value = '';
+    calculatorInput.value = '';
     firstNumber = secondNumber = 0;
 }
 
-function isOperator(buttonVal)
+function tryGetOperator(key)
 {
-    if (buttonVal === '+' || buttonVal === '-' || buttonVal === '*' || buttonVal === '/')
+    if (key === '+' || key === '-' || key === '/')
+    {
+        return key;
+    }
+    else if (key === '*' || key === 'x' || key === 'X')
+    {
+        return '*';
+    }
+    return false;
+}
+
+function isOperator(key)
+{
+    if (key === '+' || key === '-' || key === '*' || key === '/')
     {
         return true;
-    } // The ascii codes for each symbol AND the letters X and x.
-    else if (buttonVal === 43 || buttonVal === 45 || buttonVal === 47 || buttonVal === 42 || buttonVal === 88 || buttonVal === 120)
+    } // Other possible values for operators
+    else if (key === 'x' || key === 'X')
     {
         return true;
     }
     return false;
 }
 
-function isEnterPressed(buttonVal) 
+function isEnterPressed(key) 
 {
-    return buttonVal == 13;
+    return key === 'Enter' || key === 'ENTER';
 }
 
 function setupButtons()
